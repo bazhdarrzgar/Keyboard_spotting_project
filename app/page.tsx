@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Mic, Square, Upload, Play, Pause, Download, ZoomIn, ZoomOut, Trash2, Save, BarChart3, Scissors, Volume2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface KeyPress {
   id: string
