@@ -1259,9 +1259,9 @@ export default function AudioWaveformAnalyzer() {
         )}
 
         {keyPresses.length > 0 && (
-          <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2">
+          <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-800 dark:to-teal-900 border-2 dark:border-gray-700">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                 Key Press Timeline
               </h3>
               <div className="flex gap-2">
@@ -1273,7 +1273,7 @@ export default function AudioWaveformAnalyzer() {
                   }}
                   size="sm"
                   variant="outline"
-                  className="bg-white hover:bg-emerald-50"
+                  className="bg-white dark:bg-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
                 >
                   Select All
                 </Button>
@@ -1284,7 +1284,7 @@ export default function AudioWaveformAnalyzer() {
                   }}
                   size="sm"
                   variant="outline"
-                  className="bg-white hover:bg-red-50"
+                  className="bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20"
                 >
                   Clear All
                 </Button>
@@ -1296,8 +1296,8 @@ export default function AudioWaveformAnalyzer() {
                   key={keyPress.id}
                   className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 transform hover:scale-[1.02] ${
                     keyPress.selected 
-                      ? "border-red-400 bg-gradient-to-r from-red-50 to-pink-50 shadow-lg ring-2 ring-red-200" 
-                      : "border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 shadow-md"
+                      ? "border-red-400 dark:border-red-600 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 shadow-lg ring-2 ring-red-200 dark:ring-red-800" 
+                      : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 shadow-md"
                   }`}
                   onClick={() => {
                     const newSelected = new Set(selectedKeyPresses)
@@ -1319,22 +1319,22 @@ export default function AudioWaveformAnalyzer() {
                     <div className="flex items-center gap-4">
                       <div className={`w-16 h-12 border-2 rounded-lg flex items-center justify-center text-sm font-bold ${
                         keyPress.selected 
-                          ? "bg-red-100 border-red-300 text-red-800"
-                          : "bg-gray-100 border-gray-300 text-gray-700"
+                          ? "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700 text-red-800 dark:text-red-200"
+                          : "bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
                       }`}>
                         {getKeyDisplayName(keyPress.code, keyPress.key)}
                       </div>
                       <div className="text-sm">
-                        <div className="font-semibold text-gray-800">Key Press #{index + 1}</div>
-                        <div className="text-gray-600">Code: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{keyPress.code}</span></div>
+                        <div className="font-semibold text-gray-800 dark:text-gray-200">Key Press #{index + 1}</div>
+                        <div className="text-gray-600 dark:text-gray-400">Code: <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{keyPress.code}</span></div>
                       </div>
                     </div>
                     <div className="text-right text-sm">
-                      <div className="font-bold text-lg text-blue-600">{keyPress.time.toFixed(3)}s</div>
-                      <div className="text-gray-600 font-mono">
+                      <div className="font-bold text-lg text-blue-600 dark:text-blue-400">{keyPress.time.toFixed(3)}s</div>
+                      <div className="text-gray-600 dark:text-gray-400 font-mono">
                         {keyPress.startTime.toFixed(3)}s - {keyPress.endTime.toFixed(3)}s
                       </div>
-                      <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded mt-1">
+                      <div className="text-xs text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded mt-1">
                         Duration: {(keyPress.endTime - keyPress.startTime).toFixed(3)}s
                       </div>
                     </div>
