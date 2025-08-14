@@ -755,42 +755,72 @@ export default function AudioWaveformAnalyzer() {
           <div className="space-y-2">
             {KEYBOARD_LAYOUT.map((row, rowIndex) => (
               <div key={rowIndex} className="flex gap-1 justify-center">
-                {row.map((key) => {
+                {row.map((keyCode, keyIndex) => {
+                  // Create unique key using row and column index
+                  const uniqueKey = `${rowIndex}-${keyIndex}-${keyCode}`
+                  
+                  // Get display name for the key
+                  const getKeyDisplayName = (code: string) => {
+                    const keyMap: { [key: string]: string } = {
+                      ShiftLeft: "Shift",
+                      ShiftRight: "Shift", 
+                      ControlLeft: "Ctrl",
+                      ControlRight: "Ctrl",
+                      AltLeft: "Alt",
+                      AltRight: "Alt",
+                      " ": "Space"
+                    }
+                    return keyMap[code] || code
+                  }
+                  
+                  const displayName = getKeyDisplayName(keyCode)
+                  
                   const isActive =
-                    activeKeys.has(`Key${key.toUpperCase()}`) ||
-                    activeKeys.has(key === " " ? "Space" : key) ||
-                    activeKeys.has(`Digit${key}`) ||
-                    (key === "Shift" && (activeKeys.has("ShiftLeft") || activeKeys.has("ShiftRight"))) ||
-                    (key === "Ctrl" && (activeKeys.has("ControlLeft") || activeKeys.has("ControlRight"))) ||
-                    (key === "Alt" && (activeKeys.has("AltLeft") || activeKeys.has("AltRight")))
+                    activeKeys.has(`Key${keyCode.toUpperCase()}`) ||
+                    activeKeys.has(keyCode) ||
+                    activeKeys.has(`Digit${keyCode}`) ||
+                    (keyCode === "ShiftLeft" && activeKeys.has("ShiftLeft")) ||
+                    (keyCode === "ShiftRight" && activeKeys.has("ShiftRight")) ||
+                    (keyCode === "ControlLeft" && activeKeys.has("ControlLeft")) ||
+                    (keyCode === "ControlRight" && activeKeys.has("ControlRight")) ||
+                    (keyCode === "AltLeft" && activeKeys.has("AltLeft")) ||
+                    (keyCode === "AltRight" && activeKeys.has("AltRight"))
 
                   const keyPressCount = keyPresses.filter(
                     (kp) =>
-                      kp.key.toLowerCase() === key.toLowerCase() ||
-                      (key === " " && kp.key === " ") ||
-                      (key === "Shift" && (kp.code === "ShiftLeft" || kp.code === "ShiftRight")) ||
-                      (key === "Ctrl" && (kp.code === "ControlLeft" || kp.code === "ControlRight")) ||
-                      (key === "Alt" && (kp.code === "AltLeft" || kp.code === "AltRight")),
+                      kp.key.toLowerCase() === keyCode.toLowerCase() ||
+                      (keyCode === " " && kp.key === " ") ||
+                      kp.code === keyCode ||
+                      (keyCode === "ShiftLeft" && kp.code === "ShiftLeft") ||
+                      (keyCode === "ShiftRight" && kp.code === "ShiftRight") ||
+                      (keyCode === "ControlLeft" && kp.code === "ControlLeft") ||
+                      (keyCode === "ControlRight" && kp.code === "ControlRight") ||
+                      (keyCode === "AltLeft" && kp.code === "AltLeft") ||
+                      (keyCode === "AltRight" && kp.code === "AltRight"),
                   ).length
 
                   return (
                     <div
-                      key={key}
+                      key={uniqueKey}
                       className={`
-                        px-2 py-1 text-xs border rounded transition-all duration-150
-                        ${key === " " ? "w-32" : key.length > 3 ? "w-16" : "w-8"}
+                        px-3 py-2 text-sm border-2 rounded-lg transition-all duration-200 transform font-medium
+                        ${keyCode === " " ? "w-32" : keyCode.length > 5 ? "w-20" : "w-10"}
                         ${
                           isActive
-                            ? "bg-red-500 text-white border-red-600 shadow-lg transform scale-105"
+                            ? "bg-gradient-to-br from-red-500 to-red-600 text-white border-red-700 shadow-xl scale-110 ring-4 ring-red-200"
                             : keyPressCount > 0
-                              ? "bg-blue-100 border-blue-300 text-blue-800"
-                              : "bg-gray-100 border-gray-300 text-gray-700"
+                              ? "bg-gradient-to-br from-blue-400 to-blue-500 border-blue-600 text-white shadow-lg"
+                              : "bg-gradient-to-br from-gray-50 to-gray-100 border-gray-300 text-gray-700 hover:from-gray-100 hover:to-gray-200 hover:border-gray-400"
                         }
                       `}
                     >
                       <div className="text-center">
-                        {key === " " ? "Space" : key}
-                        {keyPressCount > 0 && <div className="text-xs opacity-75">({keyPressCount})</div>}
+                        <div className="font-bold">{displayName}</div>
+                        {keyPressCount > 0 && (
+                          <div className="text-xs opacity-90 mt-1 bg-white bg-opacity-20 rounded px-1">
+                            {keyPressCount}
+                          </div>
+                        )}
                       </div>
                     </div>
                   )
