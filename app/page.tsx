@@ -814,27 +814,32 @@ export default function AudioWaveformAnalyzer() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 p-6 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+        <div className="text-center space-y-4 relative">
+          {/* Theme Toggle */}
+          <div className="absolute top-0 right-0">
+            <ThemeToggle />
+          </div>
+          
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
             Audio Waveform Analyzer
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Record audio and type to capture keyboard key presses with precise timing. 
             Analyze, visualize, and export your typing patterns with professional-grade audio analysis.
           </p>
           <div className="flex justify-center gap-4 mt-6">
-            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
               🎙️ Real-time Recording
             </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
               ⌨️ Keyboard Tracking
             </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
               📊 Waveform Analysis
             </Badge>
-            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
               💾 Export Tools
             </Badge>
           </div>
