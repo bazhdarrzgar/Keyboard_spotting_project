@@ -1157,31 +1157,31 @@ export default function AudioWaveformAnalyzer() {
 
         {/* Enhanced Waveform Display */}
         {audioData && (
-          <Card className="p-6 bg-gradient-to-br from-slate-50 to-indigo-50 border-2">
+          <Card className="p-6 bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-gray-800 dark:to-indigo-900 border-2 dark:border-gray-700">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                   Audio Waveform {showSpectrogram ? "Spectrogram" : "Analysis"}
                 </h3>
                 <div className="flex items-center gap-3">
-                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-blue-100 text-blue-800">
+                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                     Duration: {audioData.duration.toFixed(2)}s
                   </Badge>
-                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-green-100 text-green-800">
+                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                     Keys: {keyPresses.length}
                   </Badge>
-                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-purple-100 text-purple-800">
+                  <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
                     Zoom: {zoomLevel.toFixed(1)}x
                   </Badge>
                   {selectedKeyPresses.size > 0 && (
-                    <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-red-100 text-red-800">
+                    <Badge variant="secondary" className="px-3 py-1 text-sm font-semibold bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                       Selected: {selectedKeyPresses.size}
                     </Badge>
                   )}
                 </div>
               </div>
 
-              <div className="relative bg-white rounded-xl border-2 border-gray-200 overflow-hidden shadow-lg">
+              <div className="relative bg-white dark:bg-gray-900 rounded-xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
                 <canvas
                   ref={canvasRef}
                   width={1200}
@@ -1200,7 +1200,7 @@ export default function AudioWaveformAnalyzer() {
                     size="sm" 
                     variant="outline" 
                     onClick={() => setZoomLevel((prev) => Math.min(20, prev * 1.2))}
-                    className="bg-white/90 backdrop-blur-sm hover:bg-white"
+                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800"
                   >
                     <ZoomIn className="w-4 h-4" />
                   </Button>
@@ -1208,7 +1208,7 @@ export default function AudioWaveformAnalyzer() {
                     size="sm" 
                     variant="outline" 
                     onClick={() => setZoomLevel((prev) => Math.max(1, prev / 1.2))}
-                    className="bg-white/90 backdrop-blur-sm hover:bg-white"
+                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800"
                   >
                     <ZoomOut className="w-4 h-4" />
                   </Button>
@@ -1219,14 +1219,14 @@ export default function AudioWaveformAnalyzer() {
                       setZoomLevel(1)
                       setPanOffset(0)
                     }}
-                    className="bg-white/90 backdrop-blur-sm hover:bg-white"
+                    className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800"
                   >
                     Reset View
                   </Button>
                 </div>
 
                 {/* Keyboard shortcuts help */}
-                <div className="absolute bottom-4 left-4 bg-black/80 text-white px-3 py-2 rounded-lg text-xs">
+                <div className="absolute bottom-4 left-4 bg-black/80 dark:bg-white/80 text-white dark:text-black px-3 py-2 rounded-lg text-xs">
                   <div className="font-semibold mb-1">Controls:</div>
                   <div>• Mouse wheel: Zoom in/out</div>
                   <div>• Click & drag: Pan view</div>
@@ -1235,21 +1235,21 @@ export default function AudioWaveformAnalyzer() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border">
-                  <div className="text-2xl font-bold text-blue-600">{keyPresses.length}</div>
-                  <div className="text-sm text-gray-600">Total Key Presses</div>
+                <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-4 rounded-lg border dark:border-gray-700">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{keyPresses.length}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Key Presses</div>
                 </div>
-                <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border">
-                  <div className="text-2xl font-bold text-green-600">{selectedKeyPresses.size}</div>
-                  <div className="text-sm text-gray-600">Selected Segments</div>
+                <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-4 rounded-lg border dark:border-gray-700">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">{selectedKeyPresses.size}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Selected Segments</div>
                 </div>
-                <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border">
-                  <div className="text-2xl font-bold text-purple-600">{(audioData.duration / 60).toFixed(1)}m</div>
-                  <div className="text-sm text-gray-600">Total Duration</div>
+                <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-4 rounded-lg border dark:border-gray-700">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{(audioData.duration / 60).toFixed(1)}m</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Duration</div>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 text-center bg-white/50 p-3 rounded-lg">
+              <p className="text-sm text-gray-600 dark:text-gray-400 text-center bg-white/50 dark:bg-gray-800/50 p-3 rounded-lg">
                 <strong>Interactive Waveform:</strong> Click on red/purple markers to select key press segments. 
                 Use mouse wheel to zoom, drag to pan. Selected segments can be exported as separate audio files.
                 {showSpectrogram && " Spectrogram view shows frequency content over time."}
