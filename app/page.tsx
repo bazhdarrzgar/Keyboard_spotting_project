@@ -26,13 +26,79 @@ interface AudioData {
   sampleRate: number
 }
 
-// Keyboard layout for visualization with unique keys
+// Enhanced keyboard layout for more realistic visualization
 const KEYBOARD_LAYOUT = [
-  ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace"],
-  ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\"],
-  ["CapsLock", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'", "Enter"],
-  ["ShiftLeft", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "ShiftRight"],
-  ["ControlLeft", "AltLeft", " ", "AltRight", "ControlRight"],
+  [
+    { key: "`", width: "w-10", label: "`", secondary: "~" },
+    { key: "1", width: "w-10", label: "1", secondary: "!" },
+    { key: "2", width: "w-10", label: "2", secondary: "@" },
+    { key: "3", width: "w-10", label: "3", secondary: "#" },
+    { key: "4", width: "w-10", label: "4", secondary: "$" },
+    { key: "5", width: "w-10", label: "5", secondary: "%" },
+    { key: "6", width: "w-10", label: "6", secondary: "^" },
+    { key: "7", width: "w-10", label: "7", secondary: "&" },
+    { key: "8", width: "w-10", label: "8", secondary: "*" },
+    { key: "9", width: "w-10", label: "9", secondary: "(" },
+    { key: "0", width: "w-10", label: "0", secondary: ")" },
+    { key: "-", width: "w-10", label: "-", secondary: "_" },
+    { key: "=", width: "w-10", label: "=", secondary: "+" },
+    { key: "Backspace", width: "w-20", label: "Backspace", secondary: "" }
+  ],
+  [
+    { key: "Tab", width: "w-16", label: "Tab", secondary: "" },
+    { key: "q", width: "w-10", label: "Q", secondary: "" },
+    { key: "w", width: "w-10", label: "W", secondary: "" },
+    { key: "e", width: "w-10", label: "E", secondary: "" },
+    { key: "r", width: "w-10", label: "R", secondary: "" },
+    { key: "t", width: "w-10", label: "T", secondary: "" },
+    { key: "y", width: "w-10", label: "Y", secondary: "" },
+    { key: "u", width: "w-10", label: "U", secondary: "" },
+    { key: "i", width: "w-10", label: "I", secondary: "" },
+    { key: "o", width: "w-10", label: "O", secondary: "" },
+    { key: "p", width: "w-10", label: "P", secondary: "" },
+    { key: "[", width: "w-10", label: "[", secondary: "{" },
+    { key: "]", width: "w-10", label: "]", secondary: "}" },
+    { key: "\\", width: "w-14", label: "\\", secondary: "|" }
+  ],
+  [
+    { key: "CapsLock", width: "w-20", label: "Caps Lock", secondary: "" },
+    { key: "a", width: "w-10", label: "A", secondary: "" },
+    { key: "s", width: "w-10", label: "S", secondary: "" },
+    { key: "d", width: "w-10", label: "D", secondary: "" },
+    { key: "f", width: "w-10", label: "F", secondary: "" },
+    { key: "g", width: "w-10", label: "G", secondary: "" },
+    { key: "h", width: "w-10", label: "H", secondary: "" },
+    { key: "j", width: "w-10", label: "J", secondary: "" },
+    { key: "k", width: "w-10", label: "K", secondary: "" },
+    { key: "l", width: "w-10", label: "L", secondary: "" },
+    { key: ";", width: "w-10", label: ";", secondary: ":" },
+    { key: "'", width: "w-10", label: "'", secondary: "\"" },
+    { key: "Enter", width: "w-24", label: "Enter", secondary: "" }
+  ],
+  [
+    { key: "ShiftLeft", width: "w-28", label: "Shift", secondary: "" },
+    { key: "z", width: "w-10", label: "Z", secondary: "" },
+    { key: "x", width: "w-10", label: "X", secondary: "" },
+    { key: "c", width: "w-10", label: "C", secondary: "" },
+    { key: "v", width: "w-10", label: "V", secondary: "" },
+    { key: "b", width: "w-10", label: "B", secondary: "" },
+    { key: "n", width: "w-10", label: "N", secondary: "" },
+    { key: "m", width: "w-10", label: "M", secondary: "" },
+    { key: ",", width: "w-10", label: ",", secondary: "<" },
+    { key: ".", width: "w-10", label: ".", secondary: ">" },
+    { key: "/", width: "w-10", label: "/", secondary: "?" },
+    { key: "ShiftRight", width: "w-28", label: "Shift", secondary: "" }
+  ],
+  [
+    { key: "ControlLeft", width: "w-16", label: "Ctrl", secondary: "" },
+    { key: "MetaLeft", width: "w-14", label: "⊞", secondary: "" },
+    { key: "AltLeft", width: "w-16", label: "Alt", secondary: "" },
+    { key: " ", width: "w-72", label: "Space", secondary: "" },
+    { key: "AltRight", width: "w-16", label: "Alt", secondary: "" },
+    { key: "MetaRight", width: "w-14", label: "⊞", secondary: "" },
+    { key: "ContextMenu", width: "w-14", label: "☰", secondary: "" },
+    { key: "ControlRight", width: "w-16", label: "Ctrl", secondary: "" }
+  ]
 ]
 
 export default function AudioWaveformAnalyzer() {
