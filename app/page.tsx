@@ -524,8 +524,7 @@ export default function AudioWaveformAnalyzer() {
       
       // Time display
       ctx.fillStyle = "#ef4444"
-      ctx.font = "14px monospace"
-      ctx.fontWeight = "bold"
+      ctx.font = "bold 14px monospace"
       const timeText = `${currentTime.toFixed(2)}s`
       const textWidth = ctx.measureText(timeText).width
       ctx.fillText(timeText, x - textWidth / 2, height - 10)
@@ -618,13 +617,13 @@ export default function AudioWaveformAnalyzer() {
       let closestKey: KeyPress | null = null
       let minDistance = Number.POSITIVE_INFINITY
 
-      keyPresses.forEach((keyPress) => {
+      for (const keyPress of keyPresses) {
         const distance = Math.abs(keyPress.time - clickTime)
         if (distance < minDistance && distance < 0.1) {
           minDistance = distance
           closestKey = keyPress
         }
-      })
+      }
 
       if (closestKey) {
         const newSelected = new Set(selectedKeyPresses)
