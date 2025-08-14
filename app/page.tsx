@@ -119,7 +119,20 @@ export default function AudioWaveformAnalyzer() {
 
     window.addEventListener('keydown', handleKeyboardShortcuts)
     return () => window.removeEventListener('keydown', handleKeyboardShortcuts)
-  }, [isRecording, audioData, selectedKeyPresses, keyPresses, startRecording, stopRecording, togglePlayback, exportSelectedSegments])
+  }, [isRecording, audioData, selectedKeyPresses, keyPresses])
+
+  // Initialize audio context
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close()
+      }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [])
 
   // Update playhead position during playback
   const updatePlayhead = useCallback(() => {
