@@ -697,42 +697,135 @@ export default function AudioWaveformAnalyzer() {
           </p>
         </div>
 
-        {/* Controls */}
-        <Card className="p-6">
+        {/* Enhanced Controls */}
+        <Card className="p-6 bg-gradient-to-r from-slate-50 to-blue-50 border-2">
           <div className="flex flex-wrap gap-4 items-center justify-center">
             <Button
               onClick={isRecording ? stopRecording : startRecording}
               variant={isRecording ? "destructive" : "default"}
-              className="flex items-center gap-2"
+              className={`flex items-center gap-2 px-6 py-3 text-lg font-semibold rounded-xl ${
+                isRecording 
+                  ? "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg"
+                  : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
+              }`}
             >
-              {isRecording ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-              {isRecording ? "Stop Recording" : "Record"}
+              {isRecording ? <Square className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              {isRecording ? "Stop Recording" : "Start Recording"}
             </Button>
 
-            <Button onClick={() => fileInputRef.current?.click()} variant="outline" className="flex items-center gap-2">
-              <Upload className="w-4 h-4" />
+            <Button 
+              onClick={() => fileInputRef.current?.click()} 
+              variant="outline" 
+              className="flex items-center gap-2 px-6 py-3 text-lg bg-white hover:bg-gray-50 border-2 rounded-xl shadow-md"
+            >
+              <Upload className="w-5 h-5" />
               Upload Audio
             </Button>
 
             {audioData && (
               <>
-                <Button onClick={togglePlayback} variant="outline" className="flex items-center gap-2 bg-transparent">
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                <Button 
+                  onClick={togglePlayback} 
+                  variant="outline" 
+                  className={`flex items-center gap-2 px-6 py-3 text-lg rounded-xl shadow-md ${
+                    isPlaying 
+                      ? "bg-red-50 border-red-300 text-red-700 hover:bg-red-100"
+                      : "bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
+                  }`}
+                >
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                   {isPlaying ? "Pause" : "Play"}
+                </Button>
+
+                <Button
+                  onClick={() => setShowSpectrogram(!showSpectrogram)}
+                  variant="outline"
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl shadow-md ${
+                    showSpectrogram 
+                      ? "bg-purple-50 border-purple-300 text-purple-700"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  <BarChart3 className="w-5 h-5" />
+                  {showSpectrogram ? "Waveform" : "Spectrogram"}
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setTrimStart(null)
+                    setTrimEnd(null)
+                    setSelectedKeyPresses(new Set())
+                    setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: false })))
+                  }}
+                  variant="outline"
+                  className="flex items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-white hover:bg-gray-50"
+                >
+                  <Trash2 className="w-5 h-5" />
+                  Clear Selection
                 </Button>
 
                 <Button
                   onClick={exportSelectedSegments}
                   variant="outline"
-                  className="flex items-center gap-2 bg-transparent"
+                  className="flex items-center gap-2 px-6 py-3 text-lg bg-yellow-50 border-yellow-300 text-yellow-700 hover:bg-yellow-100 rounded-xl shadow-md"
                   disabled={selectedKeyPresses.size === 0}
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-5 h-5" />
                   Export Selected ({selectedKeyPresses.size})
                 </Button>
               </>
             )}
           </div>
+
+          {/* Audio progress bar */}
+          {audioData && (
+            <div className="mt-6">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-mono text-gray-600">
+                  {Math.floor(currentTime / 60)}:{(currentTime % 60).toFixed(0).padStart(2, '0')}
+                </span>
+                <div className="flex-1 relative">
+                  <div className="h-2 bg-gray-200 rounded-full">
+                    <div 
+                      className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all"
+                      style={{ width: `${(currentTime / audioData.duration) * 100}%` }}
+                    />
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max={audioData.duration}
+                    step="0.1"
+                    value={currentTime}
+                    onChange={(e) => {
+                      const time = parseFloat(e.target.value)
+                      setCurrentTime(time)
+                      if (audioRef.current) {
+                        audioRef.current.currentTime = time
+                      }
+                    }}
+                    className="absolute inset-0 w-full h-2 opacity-0 cursor-pointer"
+                  />
+                </div>
+                <span className="text-sm font-mono text-gray-600">
+                  {Math.floor(audioData.duration / 60)}:{(audioData.duration % 60).toFixed(0).padStart(2, '0')}
+                </span>
+                <Button
+                  onClick={() => {
+                    setCurrentTime(0)
+                    if (audioRef.current) {
+                      audioRef.current.currentTime = 0
+                    }
+                  }}
+                  size="sm"
+                  variant="outline"
+                  className="px-3 py-1"
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
+          )}
 
           <input
             ref={fileInputRef}
@@ -747,6 +840,11 @@ export default function AudioWaveformAnalyzer() {
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
+            onTimeUpdate={() => {
+              if (audioRef.current) {
+                setCurrentTime(audioRef.current.currentTime)
+              }
+            }}
           />
         </Card>
 
