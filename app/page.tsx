@@ -846,42 +846,42 @@ export default function AudioWaveformAnalyzer() {
         </div>
 
         {/* Keyboard Shortcuts Help */}
-        <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200">
-          <h3 className="text-lg font-bold mb-3 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+        <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-800">
+          <h3 className="text-lg font-bold mb-3 bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
             ⌨️ Keyboard Shortcuts
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+R</kbd>
-              <div className="mt-1 text-gray-600">Start Recording</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+R</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Start Recording</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+Space</kbd>
-              <div className="mt-1 text-gray-600">Play/Pause</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+Space</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Play/Pause</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+A</kbd>
-              <div className="mt-1 text-gray-600">Select All</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+A</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Select All</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+S</kbd>
-              <div className="mt-1 text-gray-600">Export Selected</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+S</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Export Selected</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+D</kbd>
-              <div className="mt-1 text-gray-600">Deselect All</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Ctrl+D</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Deselect All</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Escape</kbd>
-              <div className="mt-1 text-gray-600">Stop Recording</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Escape</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Stop Recording</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Mouse Wheel</kbd>
-              <div className="mt-1 text-gray-600">Zoom In/Out</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Mouse Wheel</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Zoom In/Out</div>
             </div>
-            <div className="bg-white/70 p-3 rounded-lg">
-              <kbd className="bg-gray-200 px-2 py-1 rounded font-mono text-xs">Click+Drag</kbd>
-              <div className="mt-1 text-gray-600">Pan Waveform</div>
+            <div className="bg-white/70 dark:bg-gray-800/70 p-3 rounded-lg">
+              <kbd className="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded font-mono text-xs">Click+Drag</kbd>
+              <div className="mt-1 text-gray-600 dark:text-gray-400">Pan Waveform</div>
             </div>
           </div>
         </Card>
