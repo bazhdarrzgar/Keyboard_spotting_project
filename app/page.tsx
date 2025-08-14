@@ -69,8 +69,29 @@ export default function AudioWaveformAnalyzer() {
       if (audioContextRef.current) {
         audioContextRef.current.close()
       }
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
     }
   }, [])
+
+  // Update playhead position during playback
+  const updatePlayhead = useCallback(() => {
+    if (audioRef.current && isPlaying && audioData) {
+      setCurrentTime(audioRef.current.currentTime)
+      animationFrameRef.current = requestAnimationFrame(updatePlayhead)
+    }
+  }, [isPlaying, audioData])
+
+  useEffect(() => {
+    if (isPlaying) {
+      updatePlayhead()
+    } else {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [isPlaying, updatePlayhead])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
