@@ -259,7 +259,7 @@ export default function AudioWaveformAnalyzer() {
     [processAudioBlob, toast],
   )
 
-  // Draw waveform
+  // Draw waveform with enhanced visualization
   const drawWaveform = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas || !audioData) return
@@ -270,8 +270,11 @@ export default function AudioWaveformAnalyzer() {
     const { width, height } = canvas
     const { samples, duration } = audioData
 
-    // Clear canvas
-    ctx.fillStyle = "#ffffff"
+    // Clear canvas with gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 0, height)
+    gradient.addColorStop(0, "#f8fafc")
+    gradient.addColorStop(1, "#f1f5f9")
+    ctx.fillStyle = gradient
     ctx.fillRect(0, 0, width, height)
 
     // Calculate visible range based on zoom and pan
@@ -283,71 +286,190 @@ export default function AudioWaveformAnalyzer() {
     const endSample = Math.floor(endTime * audioData.sampleRate)
     const visibleSamples = endSample - startSample
 
-    // Draw waveform
-    ctx.strokeStyle = "#3b82f6"
-    ctx.lineWidth = 1
-    ctx.beginPath()
+    // Draw waveform with enhanced styling
+    if (showSpectrogram) {
+      // Simple spectrogram visualization
+      ctx.fillStyle = "#3b82f6"
+      for (let x = 0; x < width; x += 2) {
+        const sampleIndex = startSample + Math.floor((x / width) * visibleSamples)
+        if (sampleIndex < samples.length) {
+          const amplitude = Math.abs(samples[sampleIndex])
+          const barHeight = amplitude * height * 0.8
+          const hue = 220 + amplitude * 60
+          ctx.fillStyle = `hsl(${hue}, 80%, 60%)`
+          ctx.fillRect(x, height / 2 - barHeight / 2, 2, barHeight)
+        }
+      }
+    } else {
+      // Traditional waveform
+      ctx.strokeStyle = "#3b82f6"
+      ctx.lineWidth = 2
+      ctx.beginPath()
 
-    for (let x = 0; x < width; x++) {
-      const sampleIndex = startSample + Math.floor((x / width) * visibleSamples)
-      if (sampleIndex < samples.length) {
-        const amplitude = samples[sampleIndex]
-        const y = height / 2 - (amplitude * height) / 2
+      // Draw filled waveform
+      ctx.fillStyle = "rgba(59, 130, 246, 0.1)"
+      ctx.beginPath()
+      ctx.moveTo(0, height / 2)
 
-        if (x === 0) {
-          ctx.moveTo(x, y)
-        } else {
+      for (let x = 0; x < width; x++) {
+        const sampleIndex = startSample + Math.floor((x / width) * visibleSamples)
+        if (sampleIndex < samples.length) {
+          const amplitude = samples[sampleIndex]
+          const y = height / 2 - (amplitude * height) / 2
           ctx.lineTo(x, y)
         }
       }
-    }
-    ctx.stroke()
+      ctx.lineTo(width, height / 2)
+      ctx.closePath()
+      ctx.fill()
 
+      // Draw waveform outline
+      ctx.strokeStyle = "#3b82f6"
+      ctx.lineWidth = 1.5
+      ctx.beginPath()
+
+      for (let x = 0; x < width; x++) {
+        const sampleIndex = startSample + Math.floor((x / width) * visibleSamples)
+        if (sampleIndex < samples.length) {
+          const amplitude = samples[sampleIndex]
+          const y = height / 2 - (amplitude * height) / 2
+
+          if (x === 0) {
+            ctx.moveTo(x, y)
+          } else {
+            ctx.lineTo(x, y)
+          }
+        }
+      }
+      ctx.stroke()
+    }
+
+    // Draw trim markers
+    if (trimStart !== null && trimStart >= startTime && trimStart <= endTime) {
+      const x = ((trimStart - startTime) / visibleDuration) * width
+      ctx.strokeStyle = "#10b981"
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, height)
+      ctx.stroke()
+      
+      ctx.fillStyle = "#10b981"
+      ctx.font = "12px monospace"
+      ctx.fillText("Start", x + 5, 20)
+    }
+
+    if (trimEnd !== null && trimEnd >= startTime && trimEnd <= endTime) {
+      const x = ((trimEnd - startTime) / visibleDuration) * width
+      ctx.strokeStyle = "#f59e0b"
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, height)
+      ctx.stroke()
+      
+      ctx.fillStyle = "#f59e0b"
+      ctx.font = "12px monospace"
+      ctx.fillText("End", x + 5, 20)
+    }
+
+    // Draw playhead
+    if (currentTime >= startTime && currentTime <= endTime) {
+      const x = ((currentTime - startTime) / visibleDuration) * width
+      
+      // Playhead line with glow effect
+      ctx.shadowColor = "#ef4444"
+      ctx.shadowBlur = 10
+      ctx.strokeStyle = "#ef4444"
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, height)
+      ctx.stroke()
+      
+      // Reset shadow
+      ctx.shadowBlur = 0
+      
+      // Playhead indicator
+      ctx.fillStyle = "#ef4444"
+      ctx.beginPath()
+      ctx.arc(x, 10, 6, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Time display
+      ctx.fillStyle = "#ef4444"
+      ctx.font = "14px monospace"
+      ctx.fontWeight = "bold"
+      const timeText = `${currentTime.toFixed(2)}s`
+      const textWidth = ctx.measureText(timeText).width
+      ctx.fillText(timeText, x - textWidth / 2, height - 10)
+    }
+
+    // Draw key press markers with enhanced styling
     keyPresses.forEach((keyPress, index) => {
       if (keyPress.time >= startTime && keyPress.time <= endTime) {
         const x = ((keyPress.time - startTime) / visibleDuration) * width
 
-        ctx.strokeStyle = keyPress.selected ? "#dc2626" : "#ef4444"
+        // Key press line
+        ctx.strokeStyle = keyPress.selected ? "#dc2626" : "#8b5cf6"
         ctx.lineWidth = keyPress.selected ? 3 : 2
+        ctx.setLineDash(keyPress.selected ? [] : [5, 3])
         ctx.beginPath()
         ctx.moveTo(x, 0)
         ctx.lineTo(x, height)
         ctx.stroke()
+        ctx.setLineDash([])
 
-        // Draw key label
-        ctx.fillStyle = keyPress.selected ? "#dc2626" : "#ef4444"
-        ctx.font = "12px monospace"
+        // Enhanced key label with background
         const keyLabel = keyPress.key === " " ? "Space" : keyPress.key
+        ctx.font = "12px monospace"
         const labelWidth = ctx.measureText(keyLabel).width
-        ctx.fillText(keyLabel, x - labelWidth / 2, 20)
+        
+        // Label background
+        ctx.fillStyle = keyPress.selected ? "#dc2626" : "#8b5cf6"
+        ctx.fillRect(x - labelWidth / 2 - 4, 25, labelWidth + 8, 18)
+        
+        // Label text
+        ctx.fillStyle = "white"
+        ctx.fillText(keyLabel, x - labelWidth / 2, 37)
 
-        // Draw timing info
-        ctx.fillStyle = "#6b7280"
-        ctx.font = "10px monospace"
-        const timeLabel = `${keyPress.time.toFixed(2)}s`
-        const timeLabelWidth = ctx.measureText(timeLabel).width
-        ctx.fillText(timeLabel, x - timeLabelWidth / 2, height - 10)
-
-        // Draw selection highlight
+        // Selection highlight with animation
         if (keyPress.selected) {
-          ctx.fillStyle = "rgba(220, 38, 38, 0.1)"
+          ctx.fillStyle = "rgba(220, 38, 38, 0.15)"
           const selectionStart = ((keyPress.startTime - startTime) / visibleDuration) * width
           const selectionEnd = ((keyPress.endTime - startTime) / visibleDuration) * width
           ctx.fillRect(selectionStart, 0, selectionEnd - selectionStart, height)
+          
+          // Animated border
+          const time = Date.now() / 1000
+          const alpha = 0.3 + 0.2 * Math.sin(time * 4)
+          ctx.strokeStyle = `rgba(220, 38, 38, ${alpha})`
+          ctx.lineWidth = 2
+          ctx.strokeRect(selectionStart, 0, selectionEnd - selectionStart, height)
         }
       }
     })
 
-    // Draw time markers
-    ctx.fillStyle = "#6b7280"
-    ctx.font = "12px monospace"
+    // Enhanced time markers
+    ctx.fillStyle = "#64748b"
+    ctx.font = "11px monospace"
     const timeStep = visibleDuration / 10
     for (let i = 0; i <= 10; i++) {
       const time = startTime + i * timeStep
       const x = (i / 10) * width
-      ctx.fillText(`${time.toFixed(1)}s`, x, height - 25)
+      
+      // Time marker line
+      ctx.strokeStyle = "#e2e8f0"
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.moveTo(x, height - 30)
+      ctx.lineTo(x, height)
+      ctx.stroke()
+      
+      // Time text
+      ctx.fillText(`${time.toFixed(1)}s`, x - 15, height - 5)
     }
-  }, [audioData, keyPresses, zoomLevel, panOffset])
+  }, [audioData, keyPresses, zoomLevel, panOffset, currentTime, showSpectrogram, trimStart, trimEnd])
 
   // Redraw when dependencies change
   useEffect(() => {
