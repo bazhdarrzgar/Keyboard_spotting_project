@@ -887,7 +887,7 @@ export default function AudioWaveformAnalyzer() {
         </Card>
 
         {/* Enhanced Controls */}
-        <Card className="p-6 bg-gradient-to-r from-slate-50 to-blue-50 border-2">
+        <Card className="p-6 bg-gradient-to-r from-slate-50 to-blue-50 dark:from-gray-800 dark:to-blue-900 border-2 dark:border-gray-700">
           <div className="flex flex-wrap gap-4 items-center justify-center">
             <Button
               onClick={isRecording ? stopRecording : startRecording}
@@ -905,7 +905,7 @@ export default function AudioWaveformAnalyzer() {
             <Button 
               onClick={() => fileInputRef.current?.click()} 
               variant="outline" 
-              className="flex items-center gap-2 px-6 py-3 text-lg bg-white hover:bg-gray-50 border-2 rounded-xl shadow-md"
+              className="flex items-center gap-2 px-6 py-3 text-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 rounded-xl shadow-md"
             >
               <Upload className="w-5 h-5" />
               Upload Audio
@@ -918,8 +918,8 @@ export default function AudioWaveformAnalyzer() {
                   variant="outline" 
                   className={`flex items-center gap-2 px-6 py-3 text-lg rounded-xl shadow-md ${
                     isPlaying 
-                      ? "bg-red-50 border-red-300 text-red-700 hover:bg-red-100"
-                      : "bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
+                      ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+                      : "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30"
                   }`}
                 >
                   {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -931,8 +931,8 @@ export default function AudioWaveformAnalyzer() {
                   variant="outline"
                   className={`flex items-center gap-2 px-4 py-3 rounded-xl shadow-md ${
                     showSpectrogram 
-                      ? "bg-purple-50 border-purple-300 text-purple-700"
-                      : "bg-white border-gray-300"
+                      ? "bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-400"
+                      : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
                   }`}
                 >
                   <BarChart3 className="w-5 h-5" />
@@ -947,7 +947,7 @@ export default function AudioWaveformAnalyzer() {
                     setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: false })))
                   }}
                   variant="outline"
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-white hover:bg-gray-50"
+                  className="flex items-center gap-2 px-4 py-3 rounded-xl shadow-md bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <Trash2 className="w-5 h-5" />
                   Clear Selection
@@ -956,7 +956,7 @@ export default function AudioWaveformAnalyzer() {
                 <Button
                   onClick={exportSelectedSegments}
                   variant="outline"
-                  className="flex items-center gap-2 px-6 py-3 text-lg bg-yellow-50 border-yellow-300 text-yellow-700 hover:bg-yellow-100 rounded-xl shadow-md"
+                  className="flex items-center gap-2 px-6 py-3 text-lg bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 rounded-xl shadow-md"
                   disabled={selectedKeyPresses.size === 0}
                 >
                   <Download className="w-5 h-5" />
@@ -970,13 +970,13 @@ export default function AudioWaveformAnalyzer() {
           {audioData && (
             <div className="mt-6">
               <div className="flex items-center gap-4">
-                <span className="text-sm font-mono text-gray-600">
+                <span className="text-sm font-mono text-gray-600 dark:text-gray-400">
                   {Math.floor(currentTime / 60)}:{(currentTime % 60).toFixed(0).padStart(2, '0')}
                 </span>
                 <div className="flex-1 relative">
-                  <div className="h-2 bg-gray-200 rounded-full">
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
                     <div 
-                      className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all"
+                      className="h-2 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full transition-all"
                       style={{ width: `${(currentTime / audioData.duration) * 100}%` }}
                     />
                   </div>
@@ -996,7 +996,7 @@ export default function AudioWaveformAnalyzer() {
                     className="absolute inset-0 w-full h-2 opacity-0 cursor-pointer"
                   />
                 </div>
-                <span className="text-sm font-mono text-gray-600">
+                <span className="text-sm font-mono text-gray-600 dark:text-gray-400">
                   {Math.floor(audioData.duration / 60)}:{(audioData.duration % 60).toFixed(0).padStart(2, '0')}
                 </span>
                 <Button
