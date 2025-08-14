@@ -688,13 +688,30 @@ export default function AudioWaveformAnalyzer() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Audio Waveform Analyzer</h1>
-          <p className="text-muted-foreground">
-            Record audio and type to capture keyboard key presses with precise timing
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            Audio Waveform Analyzer
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Record audio and type to capture keyboard key presses with precise timing. 
+            Analyze, visualize, and export your typing patterns with professional-grade audio analysis.
           </p>
+          <div className="flex justify-center gap-4 mt-6">
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+              🎙️ Real-time Recording
+            </Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+              ⌨️ Keyboard Tracking
+            </Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+              📊 Waveform Analysis
+            </Badge>
+            <Badge variant="outline" className="px-4 py-2 text-sm bg-white/70 backdrop-blur-sm">
+              💾 Export Tools
+            </Badge>
+          </div>
         </div>
 
         {/* Enhanced Controls */}
