@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Mic, Square, Upload, Play, Pause, Download, ZoomIn, ZoomOut, Trash2, Save, BarChart3, Scissors, Volume2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useTheme } from "next-themes"
 
 interface KeyPress {
   id: string
@@ -103,6 +104,7 @@ const KEYBOARD_LAYOUT = [
 
 export default function AudioWaveformAnalyzer() {
   const { toast } = useToast()
+  const { theme } = useTheme()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -398,8 +400,13 @@ export default function AudioWaveformAnalyzer() {
 
     // Clear canvas with gradient background
     const gradient = ctx.createLinearGradient(0, 0, 0, height)
-    gradient.addColorStop(0, "#f8fafc")
-    gradient.addColorStop(1, "#f1f5f9")
+    if (theme === 'dark') {
+      gradient.addColorStop(0, "#1e293b") // slate-800
+      gradient.addColorStop(1, "#0f172a") // slate-900
+    } else {
+      gradient.addColorStop(0, "#f8fafc") // slate-50
+      gradient.addColorStop(1, "#f1f5f9") // slate-100
+    }
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, width, height)
 
@@ -415,25 +422,27 @@ export default function AudioWaveformAnalyzer() {
     // Draw waveform with enhanced styling
     if (showSpectrogram) {
       // Simple spectrogram visualization
-      ctx.fillStyle = "#3b82f6"
+      ctx.fillStyle = theme === 'dark' ? "#60a5fa" : "#3b82f6"
       for (let x = 0; x < width; x += 2) {
         const sampleIndex = startSample + Math.floor((x / width) * visibleSamples)
         if (sampleIndex < samples.length) {
           const amplitude = Math.abs(samples[sampleIndex])
           const barHeight = amplitude * height * 0.8
-          const hue = 220 + amplitude * 60
-          ctx.fillStyle = `hsl(${hue}, 80%, 60%)`
+          const hue = theme === 'dark' ? 200 + amplitude * 60 : 220 + amplitude * 60 // Slightly different hue for dark mode
+          const saturation = theme === 'dark' ? 90 : 80 // Higher saturation for dark mode
+          const lightness = theme === 'dark' ? 70 : 60 // Higher lightness for dark mode
+          ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`
           ctx.fillRect(x, height / 2 - barHeight / 2, 2, barHeight)
         }
       }
     } else {
       // Traditional waveform
-      ctx.strokeStyle = "#3b82f6"
+      ctx.strokeStyle = theme === 'dark' ? "#60a5fa" : "#3b82f6" // Brighter blue for dark mode
       ctx.lineWidth = 2
       ctx.beginPath()
 
       // Draw filled waveform
-      ctx.fillStyle = "rgba(59, 130, 246, 0.1)"
+      ctx.fillStyle = theme === 'dark' ? "rgba(59, 130, 246, 0.2)" : "rgba(59, 130, 246, 0.1)"
       ctx.beginPath()
       ctx.moveTo(0, height / 2)
 
@@ -450,7 +459,7 @@ export default function AudioWaveformAnalyzer() {
       ctx.fill()
 
       // Draw waveform outline
-      ctx.strokeStyle = "#3b82f6"
+      ctx.strokeStyle = theme === 'dark' ? "#60a5fa" : "#3b82f6" // Brighter blue for dark mode
       ctx.lineWidth = 1.5
       ctx.beginPath()
 
@@ -480,7 +489,7 @@ export default function AudioWaveformAnalyzer() {
       ctx.lineTo(x, height)
       ctx.stroke()
       
-      ctx.fillStyle = "#10b981"
+      ctx.fillStyle = theme === 'dark' ? "#34d399" : "#10b981"
       ctx.font = "12px monospace"
       ctx.fillText("Start", x + 5, 20)
     }
@@ -494,7 +503,7 @@ export default function AudioWaveformAnalyzer() {
       ctx.lineTo(x, height)
       ctx.stroke()
       
-      ctx.fillStyle = "#f59e0b"
+      ctx.fillStyle = theme === 'dark' ? "#fbbf24" : "#f59e0b"
       ctx.font = "12px monospace"
       ctx.fillText("End", x + 5, 20)
     }
@@ -560,14 +569,14 @@ export default function AudioWaveformAnalyzer() {
 
         // Selection highlight with animation
         if (keyPress.selected) {
-          ctx.fillStyle = "rgba(220, 38, 38, 0.15)"
+          ctx.fillStyle = theme === 'dark' ? "rgba(220, 38, 38, 0.25)" : "rgba(220, 38, 38, 0.15)"
           const selectionStart = ((keyPress.startTime - startTime) / visibleDuration) * width
           const selectionEnd = ((keyPress.endTime - startTime) / visibleDuration) * width
           ctx.fillRect(selectionStart, 0, selectionEnd - selectionStart, height)
           
           // Animated border
           const time = Date.now() / 1000
-          const alpha = 0.3 + 0.2 * Math.sin(time * 4)
+          const alpha = theme === 'dark' ? 0.5 + 0.3 * Math.sin(time * 4) : 0.3 + 0.2 * Math.sin(time * 4)
           ctx.strokeStyle = `rgba(220, 38, 38, ${alpha})`
           ctx.lineWidth = 2
           ctx.strokeRect(selectionStart, 0, selectionEnd - selectionStart, height)
@@ -576,7 +585,7 @@ export default function AudioWaveformAnalyzer() {
     })
 
     // Enhanced time markers
-    ctx.fillStyle = "#64748b"
+    ctx.fillStyle = theme === 'dark' ? "#94a3b8" : "#64748b"
     ctx.font = "11px monospace"
     const timeStep = visibleDuration / 10
     for (let i = 0; i <= 10; i++) {
@@ -584,7 +593,7 @@ export default function AudioWaveformAnalyzer() {
       const x = (i / 10) * width
       
       // Time marker line
-      ctx.strokeStyle = "#e2e8f0"
+      ctx.strokeStyle = theme === 'dark' ? "#334155" : "#e2e8f0"
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.moveTo(x, height - 30)
@@ -594,12 +603,12 @@ export default function AudioWaveformAnalyzer() {
       // Time text
       ctx.fillText(`${time.toFixed(1)}s`, x - 15, height - 5)
     }
-  }, [audioData, keyPresses, zoomLevel, panOffset, currentTime, showSpectrogram, trimStart, trimEnd])
+  }, [audioData, keyPresses, zoomLevel, panOffset, currentTime, showSpectrogram, trimStart, trimEnd, theme])
 
   // Redraw when dependencies change
   useEffect(() => {
     drawWaveform()
-  }, [drawWaveform])
+  }, [drawWaveform, theme])
 
   // Handle canvas click for key selection
   const handleCanvasClick = useCallback(
@@ -817,7 +826,7 @@ export default function AudioWaveformAnalyzer() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="text-center space-y-4 relative">
           {/* Theme Toggle */}
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-0 right-0 p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center">
             <ThemeToggle />
           </div>
           
