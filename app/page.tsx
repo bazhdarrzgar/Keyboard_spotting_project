@@ -1039,14 +1039,45 @@ export default function AudioWaveformAnalyzer() {
         )}
 
         {keyPresses.length > 0 && (
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Key Press Timeline</h3>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
+          <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Key Press Timeline
+              </h3>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    const allIds = new Set(keyPresses.map(kp => kp.id))
+                    setSelectedKeyPresses(allIds)
+                    setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: true })))
+                  }}
+                  size="sm"
+                  variant="outline"
+                  className="bg-white hover:bg-emerald-50"
+                >
+                  Select All
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelectedKeyPresses(new Set())
+                    setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: false })))
+                  }}
+                  size="sm"
+                  variant="outline"
+                  className="bg-white hover:bg-red-50"
+                >
+                  Clear All
+                </Button>
+              </div>
+            </div>
+            <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar">
               {keyPresses.map((keyPress, index) => (
                 <div
                   key={keyPress.id}
-                  className={`p-3 border rounded cursor-pointer transition-colors flex items-center justify-between ${
-                    keyPress.selected ? "border-red-500 bg-red-50 dark:bg-red-950" : "border-border hover:bg-muted"
+                  className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 transform hover:scale-[1.02] ${
+                    keyPress.selected 
+                      ? "border-red-400 bg-gradient-to-r from-red-50 to-pink-50 shadow-lg ring-2 ring-red-200" 
+                      : "border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 shadow-md"
                   }`}
                   onClick={() => {
                     const newSelected = new Set(selectedKeyPresses)
@@ -1064,22 +1095,28 @@ export default function AudioWaveformAnalyzer() {
                     )
                   }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-8 bg-gray-100 border rounded flex items-center justify-center text-sm font-mono">
-                      {getKeyDisplayName(keyPress.code, keyPress.key)}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-16 h-12 border-2 rounded-lg flex items-center justify-center text-sm font-bold ${
+                        keyPress.selected 
+                          ? "bg-red-100 border-red-300 text-red-800"
+                          : "bg-gray-100 border-gray-300 text-gray-700"
+                      }`}>
+                        {getKeyDisplayName(keyPress.code, keyPress.key)}
+                      </div>
+                      <div className="text-sm">
+                        <div className="font-semibold text-gray-800">Key Press #{index + 1}</div>
+                        <div className="text-gray-600">Code: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{keyPress.code}</span></div>
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <div className="font-medium">Key Press #{index + 1}</div>
-                      <div className="text-muted-foreground">Code: {keyPress.code}</div>
-                    </div>
-                  </div>
-                  <div className="text-right text-sm">
-                    <div className="font-medium">{keyPress.time.toFixed(3)}s</div>
-                    <div className="text-muted-foreground">
-                      {keyPress.startTime.toFixed(3)}s - {keyPress.endTime.toFixed(3)}s
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Duration: {(keyPress.endTime - keyPress.startTime).toFixed(3)}s
+                    <div className="text-right text-sm">
+                      <div className="font-bold text-lg text-blue-600">{keyPress.time.toFixed(3)}s</div>
+                      <div className="text-gray-600 font-mono">
+                        {keyPress.startTime.toFixed(3)}s - {keyPress.endTime.toFixed(3)}s
+                      </div>
+                      <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded mt-1">
+                        Duration: {(keyPress.endTime - keyPress.startTime).toFixed(3)}s
+                      </div>
                     </div>
                   </div>
                 </div>
