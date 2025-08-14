@@ -42,6 +42,7 @@ export default function AudioWaveformAnalyzer() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const recordingStartTimeRef = useRef<number>(0)
+  const animationFrameRef = useRef<number>(0)
 
   const [isRecording, setIsRecording] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -50,6 +51,10 @@ export default function AudioWaveformAnalyzer() {
   const [selectedKeyPresses, setSelectedKeyPresses] = useState<Set<string>>(new Set())
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([])
   const [activeKeys, setActiveKeys] = useState<Set<string>>(new Set())
+  const [currentTime, setCurrentTime] = useState(0)
+  const [showSpectrogram, setShowSpectrogram] = useState(false)
+  const [trimStart, setTrimStart] = useState<number | null>(null)
+  const [trimEnd, setTrimEnd] = useState<number | null>(null)
 
   // Zoom and pan
   const [zoomLevel, setZoomLevel] = useState(1)
