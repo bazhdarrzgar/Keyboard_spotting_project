@@ -5,7 +5,7 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Mic, Square, Upload, Play, Pause, Download, ZoomIn, ZoomOut } from "lucide-react"
+import { Mic, Square, Upload, Play, Pause, Download, ZoomIn, ZoomOut, Trash2, Save, BarChart3, Scissors, Volume2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface KeyPress {
