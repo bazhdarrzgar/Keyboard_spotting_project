@@ -62,18 +62,64 @@ export default function AudioWaveformAnalyzer() {
   const [isDragging, setIsDragging] = useState(false)
   const [lastMouseX, setLastMouseX] = useState(0)
 
-  // Initialize audio context
+  // Keyboard shortcuts
   useEffect(() => {
-    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close()
-      }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+    const handleKeyboardShortcuts = (event: KeyboardEvent) => {
+      // Don't interfere with recording mode
+      if (isRecording) return
+      
+      // Only handle shortcuts when not in input fields
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return
+      
+      if (event.ctrlKey || event.metaKey) {
+        switch (event.key.toLowerCase()) {
+          case 'r':
+            event.preventDefault()
+            if (!isRecording) {
+              startRecording()
+            }
+            break
+          case ' ':
+            event.preventDefault()
+            if (audioData) {
+              togglePlayback()
+            }
+            break
+          case 's':
+            event.preventDefault()
+            if (selectedKeyPresses.size > 0) {
+              exportSelectedSegments()
+            }
+            break
+          case 'a':
+            event.preventDefault()
+            if (keyPresses.length > 0) {
+              const allIds = new Set(keyPresses.map(kp => kp.id))
+              setSelectedKeyPresses(allIds)
+              setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: true })))
+            }
+            break
+          case 'd':
+            event.preventDefault()
+            setSelectedKeyPresses(new Set())
+            setKeyPresses(prev => prev.map(kp => ({ ...kp, selected: false })))
+            break
+        }
+      } else {
+        // Single key shortcuts
+        switch (event.key.toLowerCase()) {
+          case 'escape':
+            if (isRecording) {
+              stopRecording()
+            }
+            break
+        }
       }
     }
-  }, [])
+
+    window.addEventListener('keydown', handleKeyboardShortcuts)
+    return () => window.removeEventListener('keydown', handleKeyboardShortcuts)
+  }, [isRecording, audioData, selectedKeyPresses, keyPresses, startRecording, stopRecording, togglePlayback, exportSelectedSegments])
 
   // Update playhead position during playback
   const updatePlayhead = useCallback(() => {
