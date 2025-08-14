@@ -1037,90 +1037,121 @@ export default function AudioWaveformAnalyzer() {
           />
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-gray-50 to-blue-50 border-2">
-          <h3 className="text-xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Live Keyboard Visualization
+        <Card className="p-8 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 border-2 dark:border-gray-700">
+          <h3 className="text-xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+            ⌨️ Professional Mechanical Keyboard
           </h3>
-          <div className="space-y-2">
-            {KEYBOARD_LAYOUT.map((row, rowIndex) => (
-              <div key={rowIndex} className="flex gap-1 justify-center">
-                {row.map((keyCode, keyIndex) => {
-                  // Create unique key using row and column index
-                  const uniqueKey = `${rowIndex}-${keyIndex}-${keyCode}`
-                  
-                  // Get display name for the key
-                  const getKeyDisplayName = (code: string) => {
-                    const keyMap: { [key: string]: string } = {
-                      ShiftLeft: "Shift",
-                      ShiftRight: "Shift", 
-                      ControlLeft: "Ctrl",
-                      ControlRight: "Ctrl",
-                      AltLeft: "Alt",
-                      AltRight: "Alt",
-                      " ": "Space"
-                    }
-                    return keyMap[code] || code
-                  }
-                  
-                  const displayName = getKeyDisplayName(keyCode)
-                  
-                  const isActive =
-                    activeKeys.has(`Key${keyCode.toUpperCase()}`) ||
-                    activeKeys.has(keyCode) ||
-                    activeKeys.has(`Digit${keyCode}`) ||
-                    (keyCode === "ShiftLeft" && activeKeys.has("ShiftLeft")) ||
-                    (keyCode === "ShiftRight" && activeKeys.has("ShiftRight")) ||
-                    (keyCode === "ControlLeft" && activeKeys.has("ControlLeft")) ||
-                    (keyCode === "ControlRight" && activeKeys.has("ControlRight")) ||
-                    (keyCode === "AltLeft" && activeKeys.has("AltLeft")) ||
-                    (keyCode === "AltRight" && activeKeys.has("AltRight"))
+          
+          {/* Keyboard Container with realistic background */}
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-950 dark:to-black p-8 rounded-2xl shadow-2xl border-4 border-gray-700 dark:border-gray-600">
+            <div className="space-y-2">
+              {KEYBOARD_LAYOUT.map((row, rowIndex) => (
+                <div key={rowIndex} className="flex gap-1 justify-center">
+                  {row.map((keyData, keyIndex) => {
+                    // Create unique key using row and column index
+                    const uniqueKey = `${rowIndex}-${keyIndex}-${keyData.key}`
+                    
+                    // Check if key is active
+                    const isActive =
+                      activeKeys.has(`Key${keyData.key.toUpperCase()}`) ||
+                      activeKeys.has(keyData.key) ||
+                      activeKeys.has(`Digit${keyData.key}`) ||
+                      (keyData.key === "ShiftLeft" && activeKeys.has("ShiftLeft")) ||
+                      (keyData.key === "ShiftRight" && activeKeys.has("ShiftRight")) ||
+                      (keyData.key === "ControlLeft" && activeKeys.has("ControlLeft")) ||
+                      (keyData.key === "ControlRight" && activeKeys.has("ControlRight")) ||
+                      (keyData.key === "AltLeft" && activeKeys.has("AltLeft")) ||
+                      (keyData.key === "AltRight" && activeKeys.has("AltRight")) ||
+                      (keyData.key === "MetaLeft" && activeKeys.has("MetaLeft")) ||
+                      (keyData.key === "MetaRight" && activeKeys.has("MetaRight"))
 
-                  const keyPressCount = keyPresses.filter(
-                    (kp) =>
-                      kp.key.toLowerCase() === keyCode.toLowerCase() ||
-                      (keyCode === " " && kp.key === " ") ||
-                      kp.code === keyCode ||
-                      (keyCode === "ShiftLeft" && kp.code === "ShiftLeft") ||
-                      (keyCode === "ShiftRight" && kp.code === "ShiftRight") ||
-                      (keyCode === "ControlLeft" && kp.code === "ControlLeft") ||
-                      (keyCode === "ControlRight" && kp.code === "ControlRight") ||
-                      (keyCode === "AltLeft" && kp.code === "AltLeft") ||
-                      (keyCode === "AltRight" && kp.code === "AltRight"),
-                  ).length
+                    // Count key presses
+                    const keyPressCount = keyPresses.filter(
+                      (kp) =>
+                        kp.key.toLowerCase() === keyData.key.toLowerCase() ||
+                        (keyData.key === " " && kp.key === " ") ||
+                        kp.code === keyData.key ||
+                        (keyData.key === "ShiftLeft" && kp.code === "ShiftLeft") ||
+                        (keyData.key === "ShiftRight" && kp.code === "ShiftRight") ||
+                        (keyData.key === "ControlLeft" && kp.code === "ControlLeft") ||
+                        (keyData.key === "ControlRight" && kp.code === "ControlRight") ||
+                        (keyData.key === "AltLeft" && kp.code === "AltLeft") ||
+                        (keyData.key === "AltRight" && kp.code === "AltRight"),
+                    ).length
 
-                  return (
-                    <div
-                      key={uniqueKey}
-                      className={`
-                        px-3 py-2 text-sm border-2 rounded-lg transition-all duration-200 transform font-medium
-                        ${keyCode === " " ? "w-32" : keyCode.length > 5 ? "w-20" : "w-10"}
-                        ${
-                          isActive
-                            ? "bg-gradient-to-br from-red-500 to-red-600 text-white border-red-700 shadow-xl scale-110 ring-4 ring-red-200"
+                    return (
+                      <div
+                        key={uniqueKey}
+                        className={`
+                          ${keyData.width} h-12 relative transition-all duration-150 transform
+                          ${isActive ? 'scale-95' : 'hover:scale-105'}
+                        `}
+                      >
+                        {/* Key Shadow/Base */}
+                        <div className={`
+                          absolute inset-0 rounded-lg bg-gradient-to-b from-gray-600 to-gray-800 
+                          ${isActive ? 'translate-y-1' : 'translate-y-2'}
+                          transition-transform duration-150
+                        `} />
+                        
+                        {/* Key Cap */}
+                        <div className={`
+                          absolute inset-0 rounded-lg border-2 transition-all duration-150 flex flex-col items-center justify-center text-xs font-bold
+                          ${isActive 
+                            ? 'bg-gradient-to-b from-red-400 to-red-600 border-red-700 text-white shadow-lg transform translate-y-1' 
                             : keyPressCount > 0
-                              ? "bg-gradient-to-br from-blue-400 to-blue-500 border-blue-600 text-white shadow-lg"
-                              : "bg-gradient-to-br from-gray-50 to-gray-100 border-gray-300 text-gray-700 hover:from-gray-100 hover:to-gray-200 hover:border-gray-400"
-                        }
-                      `}
-                    >
-                      <div className="text-center">
-                        <div className="font-bold">{displayName}</div>
-                        {keyPressCount > 0 && (
-                          <div className="text-xs opacity-90 mt-1 bg-white bg-opacity-20 rounded px-1">
-                            {keyPressCount}
+                              ? 'bg-gradient-to-b from-blue-200 to-blue-400 border-blue-500 text-blue-900 shadow-md'
+                              : 'bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-300 dark:to-gray-400 border-gray-300 dark:border-gray-500 text-gray-800 shadow-md hover:from-gray-200 hover:to-gray-300'
+                          }
+                        `}>
+                          {/* Secondary character (top) */}
+                          {keyData.secondary && (
+                            <div className="text-[9px] leading-none opacity-70 mb-0.5">
+                              {keyData.secondary}
+                            </div>
+                          )}
+                          
+                          {/* Main character */}
+                          <div className={`leading-none ${keyData.key.length > 4 ? 'text-[10px]' : 'text-xs'}`}>
+                            {keyData.label}
                           </div>
+                          
+                          {/* Key press counter */}
+                          {keyPressCount > 0 && (
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[8px] font-bold shadow-lg animate-pulse">
+                              {keyPressCount}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Active glow effect */}
+                        {isActive && (
+                          <div className="absolute inset-0 rounded-lg bg-red-400 opacity-30 blur-md animate-pulse" />
                         )}
                       </div>
-                    </div>
-                  )
-                })}
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+            
+            {/* Keyboard branding */}
+            <div className="flex justify-between items-center mt-6 px-4">
+              <div className="text-gray-400 text-xs font-mono">AUDIO ANALYZER v2.0</div>
+              <div className="flex gap-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="text-gray-400 text-xs">CONNECTED</div>
               </div>
-            ))}
+            </div>
           </div>
+
           {isRecording && (
-            <p className="text-sm text-muted-foreground mt-4 text-center">
-              Start typing to see key presses highlighted in real-time
-            </p>
+            <div className="mt-6 text-center">
+              <div className="inline-flex items-center gap-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-4 py-2 rounded-full border border-red-300 dark:border-red-700">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold">RECORDING - Start typing to see keys light up!</span>
+              </div>
+            </div>
           )}
         </Card>
 
